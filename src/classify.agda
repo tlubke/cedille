@@ -553,7 +553,7 @@ check-termi (Chi pi NoType t) (just tp) =
 check-termi (Chi pi NoType t) nothing =
  get-ctxt λ Γ → spanM-add (Chi-span Γ pi NoType t synthesizing [] nothing) ≫span check-term t nothing
 
-check-termi (Delta pi mT t) mtp =
+check-termi (Delta pi mT t ot) mtp =
   check-term t nothing ≫=span λ T →
   get-ctxt λ Γ →
   spanM-add (Delta-span Γ pi mT t (maybe-to-checking mtp) [] (maybe-hnf Γ T ≫=maybe check-contra Γ)) ≫span

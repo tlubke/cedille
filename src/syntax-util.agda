@@ -163,7 +163,7 @@ term-start-pos (Epsilon pi _ _ _) = pi
 term-start-pos (Phi pi _ _ _ _) = pi
 term-start-pos (Rho pi _ _ _ _ _) = pi
 term-start-pos (Chi pi _ _) = pi
-term-start-pos (Delta pi _ _) = pi
+term-start-pos (Delta pi _ _ _) = pi
 term-start-pos (Sigma pi _) = pi
 term-start-pos (Theta pi _ _ _) = pi
 term-start-pos (Mu pi _ _ _ _ _ _ _) = pi
@@ -225,7 +225,8 @@ term-end-pos (Epsilon pi _ _ t) = term-end-pos t
 term-end-pos (Phi _ _ _ _ pi) = pi
 term-end-pos (Rho pi _ _ _ t t') = term-end-pos t'
 term-end-pos (Chi pi T t') = term-end-pos t'
-term-end-pos (Delta pi oT t) = term-end-pos t
+term-end-pos (Delta pi oT t NoTerm) = term-end-pos t
+term-end-pos (Delta pi oT t (SomeTerm _ pi')) = pi' 
 term-end-pos (Sigma pi t) = term-end-pos t
 term-end-pos (Theta _ _ t ls) = lterms-end-pos (term-end-pos t) ls
 term-end-pos (Mu _ _ _ _ _ _ _ pi) = pi
@@ -386,7 +387,7 @@ is-eq-op{TERM} (Epsilon _ _ _ _) = tt
 is-eq-op{TERM} (Rho _ _ _ _ _ _) = tt
 is-eq-op{TERM} (Chi _ _ _) = tt
 is-eq-op{TERM} (Phi _ _ _ _ _) = tt
-is-eq-op{TERM} (Delta _ _ _) = tt
+is-eq-op{TERM} (Delta _ _ _ _) = tt
 is-eq-op _ = ff
 
 is-beta : {ed : exprd} → ⟦ ed ⟧ → 𝔹

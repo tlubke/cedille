@@ -35,7 +35,7 @@ untyped-term-spans (App t me t') = untyped-term-spans t ≫span untyped-term-spa
 untyped-term-spans (AppTp t T) = untyped-term-spans t ≫span untyped-type-spans T ≫span spanM-add (AppTp-span t T untyped [] nothing)
 untyped-term-spans (Beta pi ot ot') = untyped-optTerm-spans ot ≫=span λ f → untyped-optTerm-spans ot' ≫=span λ f' → spanM-add (Beta-span pi (f' (f (posinfo-plus pi 1))) untyped [] nothing)
 untyped-term-spans (Chi pi mT t) = untyped-optType-spans mT ≫span untyped-term-spans t ≫span get-ctxt λ Γ → spanM-add (Chi-span Γ pi mT t untyped [] nothing)
-untyped-term-spans (Delta pi mT t) = untyped-optType-spans mT ≫span untyped-term-spans t ≫span get-ctxt λ Γ → spanM-add (Delta-span Γ pi mT t untyped [] nothing)
+untyped-term-spans (Delta pi mT t ot) = untyped-optType-spans mT ≫span untyped-term-spans t ≫span untyped-optTerm-spans ot ≫span get-ctxt λ Γ → spanM-add (Delta-span Γ pi mT t untyped [] nothing)
 untyped-term-spans (Epsilon pi lr mm t) = untyped-term-spans t ≫span spanM-add (Epsilon-span pi lr mm t untyped [] nothing)
 untyped-term-spans (Hole pi) = get-ctxt λ Γ → spanM-add (hole-span Γ pi nothing [])
 untyped-term-spans (IotaPair pi t t' og pi') = untyped-term-spans t ≫span untyped-term-spans t' ≫span untyped-optGuide-spans og ≫=span λ tvs → spanM-add (IotaPair-span pi pi' untyped tvs nothing)

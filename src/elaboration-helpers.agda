@@ -276,8 +276,8 @@ module reindexing (Γ : ctxt) (isₒ : indices) where
     Beta pi (reindex-optTerm ρₓ is ot) (reindex-optTerm ρₓ is ot')
   reindex-term ρₓ is (Chi pi oT t) =
     Chi pi (reindex-optType ρₓ is oT) (reindex-term ρₓ is t)
-  reindex-term ρₓ is (Delta pi oT t) =
-    Delta pi (reindex-optType ρₓ is oT) (reindex-term ρₓ is t)
+  reindex-term ρₓ is (Delta pi oT t ot) =
+    Delta pi (reindex-optType ρₓ is oT) (reindex-term ρₓ is t) (reindex-optTerm ρₓ is ot)
   reindex-term ρₓ is (Epsilon pi lr m t) =
     Epsilon pi lr m (reindex-term ρₓ is t)
   reindex-term ρₓ is (Hole pi) =

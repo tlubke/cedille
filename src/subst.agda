@@ -86,7 +86,7 @@ substh-term Γ ρ σ (Sigma _ t) = Sigma posinfo-gen (substh-term Γ ρ σ t)
 substh-term Γ ρ σ (Phi _ t t₁ t₂ _) = Phi posinfo-gen (substh-term Γ ρ σ t) (substh-term Γ ρ σ t₁) (substh-term Γ ρ σ t₂) posinfo-gen
 substh-term Γ ρ σ (Rho _ op on t og t') = Rho posinfo-gen op on (substh-term Γ ρ σ t) (substh-optGuide Γ ρ σ og) (substh-term Γ ρ σ t')
 substh-term Γ ρ σ (Chi _ T t') = Chi posinfo-gen (substh-optType Γ ρ σ T) (substh-term Γ ρ σ t')
-substh-term Γ ρ σ (Delta _ T t') = Delta posinfo-gen (substh-optType Γ ρ σ T) (substh-term Γ ρ σ t')
+substh-term Γ ρ σ (Delta _ T t' ot) = Delta posinfo-gen (substh-optType Γ ρ σ T) (substh-term Γ ρ σ t') (substh-optTerm Γ ρ σ ot)
 substh-term Γ ρ σ (Theta _ θ t ls) = Theta posinfo-gen (substh-theta θ) (substh-term Γ ρ σ t) (substh-lterms ls)
   where substh-lterms : lterms → lterms
         substh-lterms = map λ where (Lterm me t) → Lterm me $ substh-term Γ ρ σ t

@@ -138,7 +138,7 @@ module elab-x (μ : trie encoded-datatype) where
       --let id = fresh-id-term Γ in
       --elab-check-term Γ t T' ≫=maybe
       --(just ∘ mrho (mbeta id id) ignored-var T')
-  elab-check-term Γ (Delta pi mT t) T =
+  elab-check-term Γ (Delta pi mT t ot) T =
     --elab-pure-type Γ (erase-type T) ≫=maybe λ T →
     elab-synth-term Γ t ≫=maybe uncurry λ t T' →
     elab-hnf-type Γ T' ff ≫=maybe λ where
@@ -150,7 +150,7 @@ module elab-x (μ : trie encoded-datatype) where
             tt-term = mlam x (mlam y (mvar x))
             ff-term = mlam x (mlam y (mvar y)) in
         if conv-term Γ t1 tt-term && conv-term Γ t2 ff-term
-          then just (Delta pi-gen (SomeType T) t)
+          then just (Delta pi-gen (SomeType T) t ot)
           else
             elab-pure-term Γ t1 ≫=maybe λ t1 →
             elab-pure-term Γ t2 ≫=maybe λ t2 →
@@ -160,7 +160,7 @@ module elab-x (μ : trie encoded-datatype) where
             let f = substh-term {TERM} Γ ρ empty-trie f in
             elab-pure-term Γ (erase-term t) ≫=maybe λ pt →
             just (Delta pi-gen (SomeType T)
-              (mrho (Sigma pi-gen t) z (mtpeq (mapp f t1) (mapp f (mvar z))) (mbeta tt-term pt)))
+              (mrho (Sigma pi-gen t) z (mtpeq (mapp f t1) (mapp f (mvar z))) (mbeta tt-term pt)) ot)
       T' → nothing
   elab-check-term Γ (Epsilon pi lr mm t) T =
     elab-hnf-type Γ T ff ≫=maybe λ where
@@ -316,7 +316,7 @@ module elab-x (μ : trie encoded-datatype) where
       --elab-type Γ T' ≫=maybe uncurry λ T' _ →
       --elab-check-term Γ t T' ≫=maybe λ t →
       --just (mrho (mbeta id id) ignored-var T'' t , T')
-  elab-synth-term Γ (Delta pi mT t) = (case mT of λ where
+  elab-synth-term Γ (Delta pi mT t ot) = (case mT of λ where
     NoType → just compileFailType
     (SomeType T) → maybe-map fst (elab-type Γ T) {-elab-pure-type Γ (erase-type T)-}) ≫=maybe λ T →
     elab-synth-term Γ t ≫=maybe uncurry λ t T' →
@@ -330,7 +330,7 @@ module elab-x (μ : trie encoded-datatype) where
             tt-term = mlam x (mlam y (mvar x))
             ff-term = mlam x (mlam y (mvar y)) in
         if conv-term Γ t1 tt-term && conv-term Γ t2 ff-term
-          then just (Delta pi-gen (SomeType T) t , T)
+          then just (Delta pi-gen (SomeType T) t ot , T)
           else
             elab-pure-term Γ t1 ≫=maybe λ t1 →
             elab-pure-term Γ t2 ≫=maybe λ t2 →
@@ -339,7 +339,7 @@ module elab-x (μ : trie encoded-datatype) where
             make-contradiction (hnf Γ unfold-all t1 tt) (hnf Γ unfold-all t2 tt) ≫=maybe λ f →
             let f = substh-term {TERM} Γ ρ empty-trie f in
             just (Delta pi-gen (SomeType T)
-              (mrho t z (mtpeq (mapp f t1) (mapp f (mvar z))) (mbeta tt-term pt)) , T)
+              (mrho t z (mtpeq (mapp f t1) (mapp f (mvar z))) (mbeta tt-term pt)) ot  , T)
       T' → nothing
   elab-synth-term Γ (Epsilon pi lr mm t) =
     elab-synth-term Γ t ≫=maybe uncurry λ where

@@ -251,7 +251,7 @@ data term where
   AppTp : term → type → term
   Beta : posinfo → optTerm → optTerm → term
   Chi : posinfo → optType → term → term
-  Delta : posinfo → optType → term → term
+  Delta : posinfo → optType → term → optTerm → term
   Epsilon : posinfo → leftRight → maybeMinus → term → term
   Hole : posinfo → term
   IotaPair : posinfo → term → term → optGuide → posinfo → term

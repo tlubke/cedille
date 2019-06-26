@@ -59,7 +59,7 @@ are-free-in-term ce x (Sigma _ t) = are-free-in-term ce x t
 are-free-in-term ce x (Phi _ t t₁ t₂ _) = (ce && are-free-in-term ce x t) || (ce && are-free-in-term ce x t₁) || are-free-in-term ce x t₂
 are-free-in-term ce x (Rho _ _ _ t ot t') = (ce && (are-free-in-term ce x t || are-free-in-optGuide ce x ot)) || are-free-in-term ce x t'
 are-free-in-term ce x (Chi _ T t') = (ce && are-free-in-optType ce x T) || are-free-in-term ce x t'
-are-free-in-term ce x (Delta _ T t') = ce && (are-free-in-optType ce x T || are-free-in-term ce x t')
+are-free-in-term ce x (Delta _ T t' ot) = are-free-in-optTerm ce x ot || (ce && (are-free-in-optType ce x T || are-free-in-term ce x t'))
 are-free-in-term ce x (Theta _ _ t ls) = are-free-in-term ce x t || are-free-in-lterms x ls
   where are-free-in-lterms : ∀{A} → trie A → lterms → 𝔹
         are-free-in-lterms x [] = ff
