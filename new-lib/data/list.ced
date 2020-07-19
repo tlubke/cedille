@@ -4,6 +4,7 @@ import bool.
 import nat.
 import option.
 import sigma.
+import decidable.
 
 import ../stdcore.
 
@@ -130,6 +131,24 @@ eqList : ∀ A: ★. ∀ B : ★ . (A ➔ B ➔ Bool) ➔ List ·A ➔ List ·B 
     | cons y ys ➔ and (eq x y) (eqList xs ys)
     }
   }.
+
+decEqList : ∀ A: ★. (Π x: A. Π y: A. Decision ·{x ≃ y}) ➔ Π xs: List ·A. Π ys: List ·A. Decision ·{ xs ≃ ys }
+= Λ A. λ eq. λ xs. μ decEqList. xs {
+  | nil ➔ λ ys. σ ys {
+    | nil ➔ decYes ·{nil ≃ nil} β
+    | cons y ys ➔ decNo ·{nil ≃ cons y ys} (λ eq'. δ - eq')
+    }
+  | cons x xs ➔ λ ys. σ ys {
+    | nil ➔ decNo ·{cons x xs ≃ nil} (λ eq'. δ - eq')
+    | cons y ys ➔ σ (eq x y) {
+      | decYes proof ➔ σ (decEqList xs ys) {
+      	| decYes proof' ➔ decYes (ρ proof - ρ proof' - β)
+	| decNo proof' ➔ decNo λ e. proof' (consInj x y (to/List -isType/decEqList xs) ys e)
+      	}
+      | decNo proof ➔ decNo λ eq'. proof (consInj2 x y (to/List -isType/decEqList xs) ys eq') 
+      }
+    }
+}.
 
 -- List and Cast
 lCastMap : CastMap ·List
